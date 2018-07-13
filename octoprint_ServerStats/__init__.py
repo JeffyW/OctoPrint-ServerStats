@@ -119,7 +119,7 @@ class ServerStatsPlugin(octoprint.plugin.StartupPlugin,
             p = content_file.read().strip()
         self._logger.debug("Temperature: %s" % p)
         
-        if self.hardware == "BCM2709":
+        if self.hardware == "BCM2835":
             p = str(float(p)/1000)
         
         return p
