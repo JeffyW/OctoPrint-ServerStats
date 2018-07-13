@@ -68,7 +68,7 @@ class ServerStatsPlugin(octoprint.plugin.StartupPlugin,
             if os.path.isfile("/sys/devices/virtual/thermal/thermal_zone0/temp"):
                 self.tempFunc = self.temp_from_thermal
 
-                self.hardware_overrides()
+            self.hardware_overrides()
             self.start_timer(1.0)
 
     def start_timer(self, interval):
@@ -104,14 +104,24 @@ class ServerStatsPlugin(octoprint.plugin.StartupPlugin,
         elif self.hardware == "BCM2709":
             self._logger.debug("Pi 2")
             self.tempFunc = self.temp_from_vcgencmd
+        elif self.hardware == "BCM2835":
+            self._logger.debug("Pi 3")
+            # Higher accuracy from thermal_zone0/temp
+            #self.tempFunc = self.temp_from_vcgencmd
         elif self.hardware == "sun50iw1p1":
             self._logger.debug("Pine A64")
+        else:
+            self._logger.debug("Unknown hardware")
     
     def temp_from_thermal(self):
         self._logger.debug("Reading: /sys/devices/virtual/thermal/thermal_zone0/temp")
         with open("/sys/devices/virtual/thermal/thermal_zone0/temp", "r") as content_file:
             p = content_file.read().strip()
         self._logger.debug("Temperature: %s" % p)
+        
+        if self.hardware == "BCM2835":
+            p = str(float(p)/1000)
+        
         return p
 
     def temp_from_vcgencmd(self):
