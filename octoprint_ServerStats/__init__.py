@@ -104,8 +104,13 @@ class ServerStatsPlugin(octoprint.plugin.StartupPlugin,
         elif self.hardware == "BCM2709":
             self._logger.debug("Pi 2")
             self.tempFunc = self.temp_from_vcgencmd
-        elif self.hardware == "sun50iw1p1":
+        elif self.hardware == "BCM2709":
+            self._logger.debug("Pi 3")
+            self.tempFunc = self.temp_from_vcgencmd
+        elif self.hardware == "BCM2835":
             self._logger.debug("Pine A64")
+        else:
+            self._logger.debug("Unknown hardware")
     
     def temp_from_thermal(self):
         self._logger.debug("Reading: /sys/devices/virtual/thermal/thermal_zone0/temp")
