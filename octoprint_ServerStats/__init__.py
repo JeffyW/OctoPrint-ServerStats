@@ -77,7 +77,7 @@ class ServerStatsPlugin(octoprint.plugin.StartupPlugin,
         self._timer.start()
 
     def get_system_stats(self):
-        self._logger.info("Collecting system stats.")
+        self._logger.debug("Collecting system stats.")
         
         stats = dict()
         if self.debugMode:
